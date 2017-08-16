@@ -6,25 +6,21 @@ set(VERSION "1.0.3")
 set(SODIUM_LIBRARY_VERSION_MAJOR 7)
 set(SODIUM_LIBRARY_VERSION_MINOR 5)
 
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}
-if(CMAKE_CXX_COMPILER_ID MATCHES "MCVS")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MP /GS /GL /analyze- /W3 /wd4146 /wd4244 /Gy /Gd /Zc:wchar_t /Zc:inline /fp:precise")
     set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG /MACHINE:X64 /NOLOGO")
     add_definitions(
             -DSODIUM_STATIC
-            -D_CONSOLE
-            -Dinline=__inline
+            -D_CONSOLE -Dinline=__inline
             -DNATIVE_LITTLE_ENDIAN
             -D_CRT_SECURE_NO_WARNINGS
             -D_LIB -DNDEBUG -DUNICODE
-            -D_UNICODE
-            -DWIN32
-            -D_WIN32
-            -DWIN64
-            -D_WIN64)
+            -D_UNICODE -DWIN32
+            -D_WIN32 -DWIN64 -D_WIN64)
 endif()
 
 if((${CMAKE_COMPILER_IS_GNUCXX}) OR (${CMAKE_C_COMPILER_ID} MATCHES "Clang"))
+    message(INFO " I'm clang or gnu")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -fvisibility=hidden -fPIC -fPIE -fno-strict-aliasing -fno-strict-overflow -fstack-protector -Winit-self -Wwrite-strings -Wdiv-by-zero")
     add_definitions(
             -DPACKAGE_NAME=\"libsodium\"
@@ -234,7 +230,10 @@ set(ADD_SOURCE_SODIUM
 
 add_library(sodium STATIC ${ADD_SOURCE_SODIUM})
 
-if(NOT ${CMAKE_COMPILER_IS_GNUCXX})
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+target_compile_options(sodium PUBLIC "/analyze-")
+endif()
+
+if(${CMAKE_HOST_WIN32})
     target_link_libraries(sodium kernel32)
-    target_compile_options(sodium PUBLIC "/analyze-")
 endif()
