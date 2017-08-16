@@ -123,3 +123,6 @@ libsodium-android-*
 /bin/
 /obj/
 Vagrantfile
+.idea/
+cmake-build-debug/
+cmake-build-release/
