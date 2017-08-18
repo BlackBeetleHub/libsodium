@@ -7,8 +7,8 @@ set(SODIUM_LIBRARY_VERSION_MAJOR 7)
 set(SODIUM_LIBRARY_VERSION_MINOR 5)
 
 if(CMAKE_C_COMPILER_ID MATCHES "MSVC")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MP /GS /GL /analyze- /W3 /wd4146 /wd4244 /Zi /Gm- /O2 /Ob1 /Zc:inline /fp:precise /errorReport:prompt /WX- /Zc:forScope /Gd /Oi /MT /EHsc /nologo")
-    set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG /MACHINE:X64 /NOLOGO")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /GS /GL /analyze- /W3 /wd4146 /wd4244 /Zi /Gm- /O2 /Ob1 /Zc:inline /fp:precise /errorReport:prompt /WX- /Zc:forScope /Gd /Oi /MT /EHsc /nologo")
+    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /LTCG /MACHINE:X64 /NOLOGO")
     add_definitions(
             -DSODIUM_STATIC
             -D_CONSOLE -Dinline=__inline
