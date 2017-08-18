@@ -21,7 +21,7 @@ endif()
 
 if((${CMAKE_COMPILER_IS_GNUCXX}) OR (CMAKE_C_COMPILER_ID MATCHES "Clang"))
     message(INFO " I'm clang or gnu")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -fvisibility=hidden -fPIC -fPIE -fno-strict-aliasing -fno-strict-overflow -fstack-protector -Winit-self -Wwrite-strings -Wdiv-by-zero")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -fvisibility=hidden -fPIC -fPIE -fno-strict-aliasing -fno-strict-overflow -fstack-protector -Winit-self -Wwrite-strings -Wdiv-by-zero -Wsometimes-uninitialized -Wall -Wextra -Wno-unknown-warning-option -Wbad-function-cast -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wfloat-equal -Wformat=2 -Wimplicit -Wmissing-declarations -Wmissing-prototypes -Wnormalized=id -Woverride-init -Wparentheses -Wpointer-arith -Wredundant-decls -Wstrict-prototypes -Wswitch-enum -Wvariable-decl")
     add_definitions(
             -DPACKAGE_NAME=\"libsodium\"
             -DPACKAGE_TARNAME=\"libsodium\"
@@ -29,7 +29,8 @@ if((${CMAKE_COMPILER_IS_GNUCXX}) OR (CMAKE_C_COMPILER_ID MATCHES "Clang"))
             -DPACKAGE_STRING=\"libsodium\ 1.0.3\"
             -DPACKAGE_BUGREPORT=\"https://github.com/jedisct1/libsodium/issues\"
             -DPACKAGE_URL=\"https://github.com/jedisct1/libsodium\"
-            -DPACKAGE=\"libsodium\" -DVERSION=\"1.0.3\"
+            -DPACKAGE=\"libsodium\"
+            -DVERSION=\"1.0.3\"
             -DSTDC_HEADERS=1
             -DHAVE_SYS_TYPES_H=1
             -DHAVE_SYS_STAT_H=1
@@ -57,11 +58,15 @@ if((${CMAKE_COMPILER_IS_GNUCXX}) OR (CMAKE_C_COMPILER_ID MATCHES "Clang"))
             -DHAVE_TI_MODE=1
             -DHAVE_CPUID=1
             -DHAVE_WEAK_SYMBOLS=1
+            -DHAVE_ARC4RANDOM=1
+            -DHAVE_ARC4RANDOM_BUF=1
             -DHAVE_MMAP=1
             -DHAVE_MLOCK=1
             -DHAVE_MADVISE=1
             -DHAVE_MPROTECT=1
-            -DHAVE_POSIX_MEMALIGN=1)
+            -DHAVE_POSIX_MEMALIGN=1
+            -D_FORTIFY_SOURCE=2
+    )
 endif()
 
 configure_file(src/libsodium/include/sodium/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include/sodium/version.h @ONLY)
