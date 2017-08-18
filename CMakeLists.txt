@@ -6,8 +6,8 @@ set(VERSION "1.0.3")
 set(SODIUM_LIBRARY_VERSION_MAJOR 7)
 set(SODIUM_LIBRARY_VERSION_MINOR 5)
 
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MP /GS /GL /analyze- /W3 /wd4146 /wd4244 /Gy /Gd /Zc:wchar_t /Zc:inline /fp:precise")
+if(CMAKE_C_COMPILER_ID MATCHES "MSVC")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MP /GS /GL /analyze- /W3 /wd4146 /wd4244 /Zi /Gm- /O2 /Ob1 /Zc:inline /fp:precise /errorReport:prompt /WX- /Zc:forScope /Gd /Oi /MT /EHsc /nologo")
     set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG /MACHINE:X64 /NOLOGO")
     add_definitions(
             -DSODIUM_STATIC
@@ -19,7 +19,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
             -D_WIN32 -DWIN64 -D_WIN64)
 endif()
 
-if((${CMAKE_COMPILER_IS_GNUCXX}) OR (${CMAKE_C_COMPILER_ID} MATCHES "Clang"))
+if((${CMAKE_COMPILER_IS_GNUCXX}) OR (CMAKE_C_COMPILER_ID MATCHES "Clang"))
     message(INFO " I'm clang or gnu")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -fvisibility=hidden -fPIC -fPIE -fno-strict-aliasing -fno-strict-overflow -fstack-protector -Winit-self -Wwrite-strings -Wdiv-by-zero")
     add_definitions(
@@ -229,10 +229,6 @@ set(ADD_SOURCE_SODIUM
         )
 
 add_library(sodium STATIC ${ADD_SOURCE_SODIUM})
-
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-target_compile_options(sodium PUBLIC "/analyze-")
-endif()
 
 if(${CMAKE_HOST_WIN32})
     target_link_libraries(sodium kernel32)
