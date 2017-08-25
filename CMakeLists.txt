@@ -19,9 +19,23 @@ if(CMAKE_C_COMPILER_ID MATCHES "MSVC")
             -D_WIN32 -DWIN64 -D_WIN64)
 endif()
 
+if(${CMAKE_COMPILER_IS_GNUCXX})
+    set(COMMON_FLAGS_WARNINGS "-Wall -Wno-unused-command-line-argument -Wno-unused-local-typedef -Wno-unknown-warning-option")
+endif()
+
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_C_FLAGS "-g -O2 -fvisibility=hidden -fPIC -fPIE -fno-strict-aliasing -fno-strict-overflow -fstack-protector -Winit-self -Wwrite-strings -Wdiv-by-zero -Wsometimes-uninitialized -Wall -Wextra -Wno-unknown-warning-option -Wbad-function-cast -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wfloat-equal -Wformat=2 -Wimplicit -Wmissing-declarations -Wmissing-prototypes -Wnormalized=id -Woverride-init -Wparentheses -Wpointer-arith -Wredundant-decls -Wstrict-prototypes -Wswitch-enum -Wvariable-decl")
+endif()
+
+
 if((${CMAKE_COMPILER_IS_GNUCXX}) OR (CMAKE_C_COMPILER_ID MATCHES "Clang"))
-    message(INFO " I'm clang or gnu")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -fvisibility=hidden -fPIC -fPIE -fno-strict-aliasing -fno-strict-overflow -fstack-protector -Winit-self -Wwrite-strings -Wdiv-by-zero -Wsometimes-uninitialized -Wall -Wextra -Wno-unknown-warning-option -Wbad-function-cast -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wfloat-equal -Wformat=2 -Wimplicit -Wmissing-declarations -Wmissing-prototypes -Wnormalized=id -Woverride-init -Wparentheses -Wpointer-arith -Wredundant-decls -Wstrict-prototypes -Wswitch-enum -Wvariable-decl")
+
+    set(CMAKE_C_FLAGS_DEBUG "-g -O0 ${COMMON_FLAGS_WARNINGS}")
+    #For Release
+    set(CMAKE_C_FLAGS_RELEASE "-g -O2 ${COMMON_FLAGS_WARNINGS}")
+    #For MaxOptz
+    set(CMAKE_C_FLAGS_MAXOPTZ "-g -O3 ${COMMON_FLAGS_WARNINGS}")
+
     add_definitions(
             -DPACKAGE_NAME=\"libsodium\"
             -DPACKAGE_TARNAME=\"libsodium\"
